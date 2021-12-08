@@ -77,14 +77,14 @@ namespace ViewSpotFinder
         }
 
         [Test]
-        public void ViewSpotFinder_Returns_One_Given_ViewSpot()
+        public void ViewSpotFinder_Returns_One_Given_SmallMesh_And_One()
         {
 			var finder = new Business.ViewSpotFinder(smallMesh);
             Assert.IsTrue(finder.findViewSpots(1).Count == 1);
         }
 
         [Test]
-        public void ViewSpotFinder_Returns_Many_Given_ViewSpot()
+        public void ViewSpotFinder_Returns_Five_Given_BigMesh_And_Five()
         {
 			var finder = new Business.ViewSpotFinder(bigmesh);
             var result = finder.findViewSpots(5);
