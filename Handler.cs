@@ -1,7 +1,7 @@
 using Amazon.Lambda.Core;
 
 [assembly:LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
-namespace AwsDotnetCsharp
+namespace ViewSpotFinder
 {
     public class Handler
     {
@@ -22,10 +22,9 @@ namespace AwsDotnetCsharp
       }
     }
 
-    public class Request
+    public class Request: Model.Mesh
     {
-      public string Key1 {get; set;}
-      public string Key2 {get; set;}
-      public string Key3 {get; set;}
     }
+
 }
+
