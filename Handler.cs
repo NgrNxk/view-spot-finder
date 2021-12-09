@@ -1,29 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
 using Amazon.Lambda.Core;
+using Amazon.Lambda.Serialization.SystemTextJson;
+using Microsoft.Extensions.DependencyInjection;
+using ViewSpotFinder.Business;
 
-[assembly:LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
+[assembly:LambdaSerializer(typeof(DefaultLambdaJsonSerializer))]
 namespace ViewSpotFinder
 {
     public class Handler
     {
-       public Response Hello(Request request)
-       {
-           return new Response("Go Serverless v1.0! Your function executed successfully!", request);
-       }
+        private readonly ServiceProvider _serviceProvider;
+
+        public Handler(ServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+        }
+
+        public Handler() : this(StartUp.Container.BuildServiceProvider())
+        {
+
+        }
+
+        public Response Hello(Request request)
+        {
+            using var stream = new FileStream(Path.Combine("testdata", request.Filename), FileMode.Open, FileAccess.Read);
+            var mesh = new DefaultLambdaJsonSerializer().Deserialize<Model.InputMesh>(stream);
+
+            var finder = new Business.ViewSpotFinder(new ParsedMesh(mesh));
+            
+            return new Response(finder.findViewSpots(request.ViewPointCount));
+        }
     }
 
     public class Response
     {
-      public string Message {get; set;}
-      public Request Request {get; set;}
+        public IList<Model.Value> ViewSpots { get; set; }
 
-      public Response(string message, Request request){
-        Message = message;
-        Request = request;
-      }
+        public Response(IList<Model.Value> viewSpots)
+        {
+            ViewSpots = viewSpots;
+        }
     }
 
-    public class Request: Model.Mesh
+    public class Request
     {
+        public string Filename { get; set; }
+        public int ViewPointCount { get; set; }
     }
 
 }

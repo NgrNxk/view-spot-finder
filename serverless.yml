@@ -54,6 +54,9 @@ provider:
 package:
   individually: true
 
+plugins:
+  - serverless-offline
+
 functions:
   hello:
     handler: CsharpHandlers::ViewSpotFinder.Handler::Hello

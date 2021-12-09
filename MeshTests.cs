@@ -3,12 +3,13 @@ using NUnit.Framework;
 using ViewSpotFinder.Model;
 using Amazon.Lambda.Serialization.SystemTextJson;
 using System.IO;
+using ViewSpotFinder.Business;
 
 namespace ViewSpotFinder
 {
     public class MeshTests
     {
-        private Mesh smallMesh = new Mesh
+        private InputMesh smallInputMesh = new InputMesh
         {
             nodes = new List<Node> {
                     new Node {
@@ -54,26 +55,29 @@ namespace ViewSpotFinder
                 }
         };
 
-        private Mesh bigmesh;
+        private ParsedMesh bigMesh;
+        private ParsedMesh smallMesh;
 
 
         [SetUp]
         public void Setup()
         {
+            smallMesh = new ParsedMesh(smallInputMesh);
+
             using var stream = new FileStream("testdata/mesh.json", FileMode.Open);
-            bigmesh = new DefaultLambdaJsonSerializer().Deserialize<Mesh>(stream);
+            bigMesh = new ParsedMesh(new DefaultLambdaJsonSerializer().Deserialize<InputMesh>(stream));
         }
 
         [Test]
         public void isViewSpot_Returns_False_Given_No_ViewSpot()
         {
-            Assert.IsFalse(smallMesh.elements[0].isViewSpot(smallMesh));
+            Assert.IsFalse(smallMesh.dElements[0].isViewSpot());
         }
 
         [Test]
         public void isViewSpot_Returns_True_Given_ViewSpot()
         {
-            Assert.IsTrue(smallMesh.elements[1].isViewSpot(smallMesh));
+            Assert.IsTrue(smallMesh.dElements[1].isViewSpot());
         }
 
         [Test]
@@ -86,7 +90,7 @@ namespace ViewSpotFinder
         [Test]
         public void ViewSpotFinder_Returns_Five_Given_BigMesh_And_Five()
         {
-			var finder = new Business.ViewSpotFinder(bigmesh);
+			var finder = new Business.ViewSpotFinder(bigMesh);
             var result = finder.findViewSpots(5);
             Assert.IsTrue(result.Count == 5);
         }

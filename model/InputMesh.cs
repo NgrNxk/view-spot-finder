@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ViewSpotFinder.Model
 {
-    public class Mesh
+    public class InputMesh
     {
 		public IList<Node> nodes { get; set; }
 		public IList<Element> elements { get; set; }

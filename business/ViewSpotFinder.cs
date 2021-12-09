@@ -1,28 +1,38 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ViewSpotFinder.Business
 {
-	public class ViewSpotFinder {
+    public class ViewSpotFinder : IViewSpotFinder
+    {
+        private ParsedMesh mesh;
 
-		private Model.Mesh mesh;
+        public ViewSpotFinder(ParsedMesh mesh)
+        {
+            this.mesh = mesh;
+        }
 
-		public ViewSpotFinder(Model.Mesh mesh) {
-			this.mesh = mesh;
-		}
-
-		public IList<Model.Value> findViewSpots(int howMany) {
-			var foundSpots = new List<Model.Value>();
-			foreach(var elevation in mesh.values.OrderByDescending(p => p.value)) {
-				var elem = mesh.elements.First(a => a.id == elevation.element_id);
-				if (elem.isViewSpot(mesh)) {
-					foundSpots.Add(elevation);
-				}
-				if (foundSpots.Count == howMany) {
-					break;
-				}
-			}
-			return foundSpots;
-		}
-	}
+        public IList<Model.Value> findViewSpots(int howMany)
+        {
+            var foundSpots = new List<Model.Value>();
+            var sorted = mesh.dElements.OrderByDescending(p => p.Value.Elevation);
+            foreach (var elem in sorted)
+            {
+                if (elem.Value.isViewSpot())
+                {
+                    foundSpots.Add(new Model.Value
+                    {
+                        element_id = elem.Key,
+                        value = elem.Value.Elevation
+                    });
+                }
+                if (foundSpots.Count == howMany)
+                {
+                    break;
+                }
+            }
+            return foundSpots;
+        }
+    }
 }
