@@ -58,7 +58,6 @@ namespace ViewSpotFinder
         private ParsedMesh bigMesh;
         private ParsedMesh smallMesh;
 
-
         [SetUp]
         public void Setup()
         {

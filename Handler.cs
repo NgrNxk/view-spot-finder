@@ -23,14 +23,14 @@ namespace ViewSpotFinder
 
         }
 
-        public Response Hello(Request request)
+        public IList<Model.Value> Hello(Request request)
         {
             using var stream = new FileStream(Path.Combine("testdata", request.Filename), FileMode.Open, FileAccess.Read);
             var mesh = new DefaultLambdaJsonSerializer().Deserialize<Model.InputMesh>(stream);
 
             var finder = new Business.ViewSpotFinder(new ParsedMesh(mesh));
             
-            return new Response(finder.findViewSpots(request.ViewPointCount));
+            return finder.findViewSpots(request.ViewPointCount);
         }
     }
 
