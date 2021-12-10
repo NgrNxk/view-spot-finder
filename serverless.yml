@@ -60,6 +60,8 @@ plugins:
 functions:
   viewspots:
     handler: CsharpHandlers::ViewSpotFinder.Handler::FindViewSpots
+    events:
+      - httpApi: 'POST /viewspots'
 
     # you can add packaging information here
     package:
