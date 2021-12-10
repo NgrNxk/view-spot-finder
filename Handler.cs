@@ -23,7 +23,7 @@ namespace ViewSpotFinder
 
         }
 
-        public IList<Model.Value> Hello(Request request)
+        public IList<Model.Value> FindViewSpots(Request request)
         {
             using var stream = new FileStream(Path.Combine("testdata", request.Filename), FileMode.Open, FileAccess.Read);
             var mesh = new DefaultLambdaJsonSerializer().Deserialize<Model.InputMesh>(stream);
@@ -32,22 +32,6 @@ namespace ViewSpotFinder
             
             return finder.findViewSpots(request.ViewPointCount);
         }
-    }
-
-    public class Response
-    {
-        public IList<Model.Value> ViewSpots { get; set; }
-
-        public Response(IList<Model.Value> viewSpots)
-        {
-            ViewSpots = viewSpots;
-        }
-    }
-
-    public class Request
-    {
-        public string Filename { get; set; }
-        public int ViewPointCount { get; set; }
     }
 
 }
