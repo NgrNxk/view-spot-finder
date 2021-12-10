@@ -47,6 +47,8 @@ windows users:
 - tidy up the artifact: right now, it's packaging the unit tests (libraries)
   into the zip. If this were to ever go into production, this would need to
   change.
+- do something with the dependency injection setup I have included. Right
+  now, it's initializes but not used.
 
 # Notes
 
