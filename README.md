@@ -4,8 +4,8 @@ Find view spots in a JSON file.
 
 ## Build
 
-As this project is using [serverless] and C#, you should have both installed
-and configured. Then you can call:
+As this project is using [serverless] and C#/.netcore3.1, you should have
+both installed and configured. Then you can call:
 
 (for Windows)
 ```bat
